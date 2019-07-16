@@ -17,7 +17,7 @@ undefined
 
 ```
 
-Next set up ten accounts with public addresses. We also set up te address of the owner
+Next set up ten accounts with public addresses. We also set up the address of the owner
 
 ```javascript
 truffle(ganache)> var accounts = await web3.eth.getAccounts()
@@ -39,11 +39,11 @@ truffle(ganache)> owner
 '0xd4a78EC056C9D715b0d06640C9372e070FB29552'
 ```
 Now we send 1000000 XDT to DumpToken contract account has thus giving it the following order
-(A) Initial holder of XDT
-and (B) Decentralized distributor of XDT. 
+<b>(A) Initial holder of XDT</b>
+and <b>(B) Decentralized distributor of XDT. </b>
 
 
-Event Triggered : Transfer.
+<strong>Events Triggered : Transfer.</strong>
 
 ```javascript
 truffle(ganache)> dumpToken.transfer(dumpToken.address, 100000)
@@ -57,11 +57,11 @@ truffle(ganache)> dumpToken.transfer(dumpToken.address, 100000)
 ```			
 Now lets make some assumptions
 
-Assumption :  User has responsibly dumped the waste [ wasteDump(Dump request from user) ].
+<i>Assumption :  User has responsibly dumped the waste [ wasteDump(Dump request from user)] <i>.
 
 Next, [F1] Smart Garbage Bin detects the Waste is responsibly dumped [ SGBSensing() ] and invokes the [F2] smart contract to transfer incentive to the user [ transferIncentive(User ID, amount) ] as shown in the code snippet below 
 
-Event Triggered: TransferIncentive.
+<strong>Events Triggered: TransferIncentive.</strong>
 
 ```javascript
 var user = accounts[1]
@@ -76,9 +76,11 @@ truffle(ganache)> dumpToken.transferIncentive(user, 10)
        args: [Result] } ] }
 ```
 
-Assumption: The Smart Garbage Bin is full.
+<i>Assumption: The Smart Garbage Bin is full.</i>
 
 [F3] This new state of the Smart Garbage Bin is checked [ SGBMessaging() ] and [F4] recorded on the blockchain by calling the smart contract [ setSmartGarbageBinStatus() ]
+
+<strong>Events Triggered: SGB_Update</strong>
 ```javascript
 truffle(ganache)> var SGB_ID = "S3"
 undefined
@@ -97,7 +99,7 @@ truffle(ganache)> smartGarbageBin.setSmartGarbageBinStatus(SGB_ID, SGB_Loc, SGB_
 
 [F5] Next, the nearby vehicle are calcuted for pick up notification [ SGBNotifying() ] and [F6] the pick up notification is sent to the nearby vehicles by calling the smart contract [ sendSGBstatus() ] as shown in the code snippet below
 
-Events Triggered: NearbyVehiclesNotification, PendingRequest
+<strong>Events Triggered: NearbyVehiclesNotification, PendingRequest</strong>
 ```javascript
 var nearbyVehicles = [ accounts[5], accounts[6] ]
 undefined
@@ -116,7 +118,7 @@ truffle(ganache)> vehicleManagement.sendSmartGarbageBinStatus(SGB_ID, SGB_Loc, S
 					
 [F7] The nearby vehicles send their response [ sendResponse()] by  [F8] calling the smart contract [ receiveResponse()] with their response.
 
-Events Triggered: RespondToPickup, PendingRequest
+<strong>Events Triggered: RespondToPickup, PendingRequest</strong>
 
 ```javascript
 var response = "AVAILABLE"
@@ -148,6 +150,8 @@ truffle(ganache)> vehicleManagement.receiveResponse(response, nearbyVehicles[1])
 
 [F9] The responses are received [ SGBNotifying() ] and the nearest vehicle amongst the nearby vehicles is calculated. [F10] The Optimal route for collecting the garbage from that SGB is sent to the nearest vehicle by calling the smart contract [ sendOptimalRoutePickUp() ] 
 
+<strong>Events Triggered: OptimalRoutePickup</strong>
+
 ```javascript
 truffle(ganache)> var nearestVehicle = nearbyVehicles[0]
 undefined
@@ -164,7 +168,7 @@ truffle(ganache)> vehicleManagement.sendOptimalRoutePickup(optimalRoute, nearest
 
 After receiving the optimal route, [F11] the nearest vehicle goes to the smart garbage bin to collect the waste [ wasteCollection() ]. Then, [F12] the pick Up information is recorded onto the blockchain by calling the smart contract [ setPickUpInformation() ].
 
-Events Triggered: PickUpInformation, SGB_Update
+<strong>Events Triggered: PickUpInformation, SGB_Update</strong>
 
 
 ```javascript
@@ -186,11 +190,11 @@ truffle(ganache)> vehicleManagement.setPickupInformation(SGB_ID, SGB_Loc, SGB_St
       args: [Result] } ] }
 ```
 
-Assumption: Vehicle is Full and ready to Dispose
+<i>Assumption: Vehicle is Full and ready to Dispose</i>
 
 [F13] The vehicle status of being full is recorded on to the blockchain by calling the smart contract [ setVehicleStatus() ]. [F14] The vehicle status is monitored [ monitorVehicleStatus() ] and since it is full, [F15] the optimal route for disposal is sent to the vehicle by calling the smart contract function [ sendOptimalRouteDisposal() ].
 
-Events Triggered: VehicleStatus, SendOptimalRouteDisposal.
+<strong>Events Triggered: VehicleStatus, SendOptimalRouteDisposal.</strong>
 ```javascript
 truffle(ganache)> var vehicleStatus = "FULL"
 undefined
@@ -212,6 +216,8 @@ event: 'SendOptimalRouteDisposal',
 
 Next, [F16] the vehicle disposes of the waste [ wasteDisposal() ] and [F17] records the disposal information on the blockchain by calling the smart contract function [ setDisposalInformation() ] which [F18] automatically sets the vehicleStatus to "AVAILABLE".
 
+
+<strong>Events Triggered: DisposalInformation, VehicleStatus</strong>
 ```javascript
 
 truffle(ganache)> nearestVehicle = accounts[5]
